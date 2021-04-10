@@ -1,14 +1,36 @@
-import nc from "next-connect";
-import {} from 'src/utils/upload';
+import { ObjectId } from 'mongodb';
+import nc from 'next-connect';
+import connectToDataBase from 'src/utils/mongodb';
+import upload from 'src/utils/upload';
 
 const handler = nc()
   .use(upload.single('file'))
-  .post((req, res) => {
-    const {title, authorName, authorAvatar, videoUrl} = req.body;
-    res.json({ hello: "world" });
+  .post(async (req, res) => {
+    const { title, authorId, authorName, authorAvatar, videoUrl } = req.body;
+    const { db } = await connectToDataBase();
+    const collection = db.collection('videos');
+
+    await collection.insertOne({
+      title,
+      authorId: ObjectId(authorId),
+      authorName,
+      authorAvatar,
+      views: 0,
+      thumb: req.file.location,
+      videoUrl,
+      updatedAt: new Date(),
+    });
+
+    res.status(200).json({ ok: true });
   })
   .patch(async (req, res) => {
-    throw new Error("Throws me around! Error can be caught and handled.");
+    throw new Error('Throws me around! Error can be caught and handled.');
   });
+
+  export const config = {
+    api: {
+      bodyParser: false,
+    }
+  }
 
 export default handler;
