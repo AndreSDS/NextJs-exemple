@@ -1,17 +1,14 @@
-export default function handler(req, res) {
-  const {
-    method,
-  } = req
+import nc from "next-connect";
+import {} from 'src/utils/upload';
 
-  switch (method) {
-    case 'POST':
-      res.status(200).json({msg: method})
-      break;
-    case 'GET':
-      res.status(200).json({msg: method})
-      break;
-    default:
-      res.setHeader('allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${method} Not Allowed`)
-  }
-}
+const handler = nc()
+  .use(upload.single('file'))
+  .post((req, res) => {
+    const {title, authorName, authorAvatar, videoUrl} = req.body;
+    res.json({ hello: "world" });
+  })
+  .patch(async (req, res) => {
+    throw new Error("Throws me around! Error can be caught and handled.");
+  });
+
+export default handler;
