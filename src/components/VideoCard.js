@@ -21,7 +21,7 @@ function VideoCard({ item }) {
   const { caption, img } = useStyles();
 
   return (
-    <Box>
+    <Box mr-2>
       <img className={img} alt={item.title} src={item.thumb} />
       <Box display="flex" mt="1">
         <Box>
