@@ -21,15 +21,15 @@ function VideoCard({ item }) {
   const { caption, img } = useStyles();
 
   return (
-    <Box mr-2>
+    <Box>
       <img className={img} alt={item.title} src={item.thumb} />
       <Box display="flex" mt="1">
-        <Box>
+        <Box mr="2">
           <Avatar alt={item.authorName} src={item.avatar}>
             SS
           </Avatar>
         </Box>
-        <Box>
+        <Box ml="2">
           <Typography
             className={caption}
             gutterBottom
@@ -38,7 +38,7 @@ function VideoCard({ item }) {
           >
             {item.title}
           </Typography>
-          <Typography display="bolck" variant="body2" color="textSecondary">
+          <Typography display="block" variant="body2" color="textSecondary">
             {item.authorName}
           </Typography>
           <Typography variant="body2" color="textSecondary">{`${

@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import { Provider } from 'next-auth/client';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'src/theme';
@@ -15,7 +16,7 @@ export default function MyApp(props) {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Youtube-clone</title>
         <meta
@@ -23,10 +24,12 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </React.Fragment>
+      <Provider session={pageProps.session}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Provider>
+    </>
   );
 }

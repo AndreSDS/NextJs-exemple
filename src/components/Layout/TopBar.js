@@ -3,6 +3,7 @@ import {
   AppBar,
   Toolbar,
   Box,
+  Avatar,
   Paper,
   InputBase,
   IconButton,
@@ -23,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none',
     zIndex: theme.zIndex.drawer + 1,
     backgroundColor: theme.palette.background.default,
+  },
+  avatar: {
+    cursor: 'pointer',
+    width: 24,
+    height: 24,
   },
   logo: {
     cursor: 'pointer',
@@ -48,8 +54,11 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {},
 }));
 
+import { signIn, signOut, useSession } from 'next-auth/client';
+
 function TopBar() {
   const { container, logo, toolbar, search, input, iconButton } = useStyles();
+  const { session } = useSession();
 
   return (
     <AppBar color="default" className={container}>
@@ -88,14 +97,27 @@ function TopBar() {
           <IconButton className={iconButton}>
             <MoreVert />
           </IconButton>
-          <Button
-            color="secondary"
-            component="a"
-            variant="outlined"
-            startIcon={<AccountCircle />}
-          >
-            Fazer Login
-          </Button>
+          {!session ? (
+            <Button
+              color="secondary"
+              component="a"
+              variant="outlined"
+              startIcon={<AccountCircle />}
+              onClick={() => signIn('google')}
+            >
+              Fazer Login
+            </Button>
+          ) : (
+            <Box display="flex" alignItems="center">
+              <Avatar
+                onClick={() => signOut()}
+                alt="user"
+                className={avatar}
+                src={session?.user?.image}
+                startIcon={<AccountCircle />}
+              />
+            </Box>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
